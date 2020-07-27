@@ -4,7 +4,6 @@ import com.github.badoualy.telegram.api.utils.id
 import com.github.badoualy.telegram.api.utils.toInputPeer
 import com.github.badoualy.telegram.tl.api.*
 import com.y9san9.kotlogram.KotlogramClient
-import examples.client
 
 
 class Peer(client: KotlogramClient, source: TLAbsPeer){

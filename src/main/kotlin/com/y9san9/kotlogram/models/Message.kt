@@ -4,7 +4,6 @@ import com.github.badoualy.telegram.api.utils.*
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.core.TLVector
 import com.y9san9.kotlogram.KotlogramClient
-import examples.client
 
 
 fun TLAbsMessage.wrap(client: KotlogramClient) : Message = when(this){
@@ -52,10 +51,11 @@ fun TLAbsMessage.wrap(client: KotlogramClient) : Message = when(this){
     else -> throw UnsupportedOperationException()
 }
 
+@Suppress("MemberVisibilityCanBePrivate", "CanBeParameter")
 class Message(
-    client: KotlogramClient,
-    @Suppress("MemberVisibilityCanBePrivate") val source: TLMessage,
-    @Suppress("MemberVisibilityCanBePrivate") val action: TLAbsMessageAction?
+    val client: KotlogramClient,
+    val source: TLMessage,
+    val action: TLAbsMessageAction?
 ){
     val id = source.id
     val isService = action == null
