@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.3.72"
+    maven
 }
 
 group = "com.y9san9.kotlogram"
@@ -24,8 +25,5 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
-    }
-    test {
-
     }
 }
