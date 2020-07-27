@@ -80,7 +80,7 @@ class Message(
     val date = source.date
     val message: String? = source.message
     val media: TLAbsMessageMedia? = source.media
-    val replyMarkup: TLAbsReplyMarkup? = source.replyMarkup // TODO: Markup wrapper
+    val replyMarkup: TLAbsReplyMarkup? = source.replyMarkup  // TODO: Markup wrapper
     val entities: TLVector<TLAbsMessageEntity>? = source.entities
     val views: Int? = source.views
     val editDate: Int? = source.editDate
