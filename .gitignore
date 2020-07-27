@@ -1,5 +1,5 @@
 /.idea/
 /.gradle/
-/src/main/kotlin/examples/Client.kt
 /build/
 /properties/
+/src/main/resources/examples/Client.kt
