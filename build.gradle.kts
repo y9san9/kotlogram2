@@ -1,3 +1,18 @@
+/**
+ * Import github repo; first add [jitpack] to repos
+ * @param repo username/repo; e.g. y9san9/kotlogram-wrapper
+ */
+fun DependencyHandlerScope.github(repo: String, tag: String = "-SNAPSHOT") = implementation(
+        repo.split("/").let { (username, repo) ->
+            "com.github.${username}:${repo}:${tag}"
+        }
+)
+/**
+ * Jitpack maven
+ */
+fun RepositoryHandler.jitpack() = maven("https://jitpack.io")
+
+
 plugins {
     kotlin("jvm") version "1.3.72"
     maven
@@ -8,12 +23,12 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
+    jitpack()
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.github.badoualy:kotlogram:1.0.0-RC3")
+    github("badoualy/kotlogram", "1.0.0-RC3")
 }
 
 configure<JavaPluginConvention> {

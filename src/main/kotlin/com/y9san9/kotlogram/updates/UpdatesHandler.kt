@@ -34,7 +34,8 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
                 this.client.cachedEntities.addAll(difference.users.map { it.wrap(this.client) })
                 this.client.cachedEntities.addAll(difference.chats.mapNotNull { it.wrap(this.client) })
                 realHandler(
-                    *difference.newMessages.map { TLUpdateNewMessage(it, pts, ptsCount) }.toTypedArray()
+                    *(difference.newMessages.map { TLUpdateNewMessage(it, pts, ptsCount) }
+                            + difference.otherUpdates.toList()).toTypedArray()
                 )
             }
         }
@@ -44,7 +45,7 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
         realHandler(update.update)
     }
 
-    override fun onUpdateTooLong(client: TelegramClient) {}
+    override fun onUpdateTooLong(client: TelegramClient) = TODO()
 
     override fun onUpdates(client: TelegramClient, updates: TLUpdates) {
         this.client.cachedEntities.addAll(updates.users.map { it.wrap(this.client) })
@@ -72,12 +73,7 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
         class MessageHandler(
             private val client: KotlogramClient,
             override val handler: (Message) -> Unit,
-            private val out: Boolean?,
-            private val toChannel: Boolean?,
-            private val toChannelId: Int?,
-            private val toUserId: Int?,
-            private val fromUserId: Int?,
-            private val textPredicate: ((String?) -> Boolean)? = null
+            private val messagePredicate: (Message) -> Unit
         ) : HandlerDSL<Message>() {
             @Suppress("UNCHECKED_CAST")
             override fun mapUpdate(update: TLAbsUpdate) = when(update){
@@ -85,33 +81,17 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
                 is TLUpdateNewChannelMessage -> update.message
                 else -> throw UnsupportedOperationException()
             }.wrap(client).also {
-                out?.apply { out assert it.out }
-                toChannel?.apply { toChannel assert it.to.isChannel }
-                toChannelId?.apply {
-                    it.to.isChannel assert true
-                    it.to.id assert toChannelId
-                }
-                toUserId?.apply {
-                    it.to.isUser assert true
-                    it.to.id assert toUserId
-                }
-                fromUserId?.apply {
-                    it.from.id assert fromUserId
-                }
-                textPredicate?.apply {
-                    textPredicate.invoke(it.message) assert true
-                }
+                messagePredicate(it)
             }
         }
+
+        /**
+         * @param messagePredicate - throw error or nothing
+         */
         fun message(
-            out: Boolean? = null,
-            toChannel: Boolean? = null,
-            toChannelId: Int? = null,
-            toUserId: Int? = null,
-            fromUserId: Int? = null,
-            textPredicate: ((String?) -> Boolean)? = null,
+            messagePredicate: (Message) -> Unit = { },
             handler: (Message) -> Unit
-        ) = handlers.add(MessageHandler(client, handler, out, toChannel, toChannelId, toUserId, fromUserId, textPredicate))
+        ) = handlers.add(MessageHandler(client, handler, messagePredicate))
 
         class AllHandler(override val handler: (TLAbsUpdate) -> Unit) : HandlerDSL<TLAbsUpdate>(){
             override fun mapUpdate(update: TLAbsUpdate) = update
@@ -122,10 +102,8 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
             for(handler in handlers)
                 handleUpdate(handler, it)
         }
-        private fun <T> handleUpdate(handler: HandlerDSL<T>, update: TLAbsUpdate){
-            try {
-                handler.handler(handler.mapUpdate(update))
-            } catch (_: Throwable){}
-        }
+        private fun <T> handleUpdate(handler: HandlerDSL<T>, update: TLAbsUpdate) = try {
+            handler.handler(handler.mapUpdate(update))
+        } catch (_: Throwable){}
     }
 }

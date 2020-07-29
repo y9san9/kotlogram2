@@ -11,7 +11,7 @@ fun main(){
         client.auth(phone, {
             print("Enter password: ")
             scanner.nextLine()
-        }){
+        }) {
             print("Enter code: ")
             scanner.nextLine()
         }
