@@ -100,4 +100,16 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         vectorOf(*entities)
     ).let {  }
 
+    fun editMessage(
+        to: TLAbsInputPeer,
+        id: Int,
+        text: String? = null,
+        replyMarkup: TLAbsReplyMarkup? = null,
+        entities: Array<TLAbsMessageEntity>
+    ): Unit = client.messagesEditMessage(true, to, id, text, replyMarkup, vectorOf(*entities)).let { }
+
+    fun delete(deleteForAll: Boolean = true, vararg ids: Int): Unit = client.messagesDeleteMessages(
+        deleteForAll, intVectorOf(*ids)
+    ).let { }
+
 }

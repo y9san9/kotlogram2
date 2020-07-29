@@ -7,6 +7,7 @@ import com.y9san9.kotlogram.KotlogramClient
 
 
 class Peer(client: KotlogramClient, source: TLAbsPeer){
+    @Suppress("MemberVisibilityCanBePrivate")
     val id = source.id!!
 
     val isUser = source is TLPeerUser
@@ -19,7 +20,7 @@ class Peer(client: KotlogramClient, source: TLAbsPeer){
             is TLPeerChannel -> client.getChannel(id)?.source?.toInputPeer()
             is TLPeerChat -> client.getChat(id)?.source?.toInputPeer()
             else -> throw UnsupportedOperationException()
-        }
+        }!!
     }
 }
 fun TLAbsPeer.wrap(client: KotlogramClient) = Peer(client, this)

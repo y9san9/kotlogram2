@@ -92,8 +92,16 @@ class Message(
         replyMarkup: TLAbsReplyMarkup? = null,
         entities: Array<TLAbsMessageEntity> = arrayOf()
     ) = client.sendMessage(
-        if(to.isUser && !out) from.source.toInputPeer() else to.input!!,
+        if(to.isUser && !out) from.source.toInputPeer() else to.input,
         text, silent, clearDraft, id, replyMarkup, entities
     )
+
+    fun edit(
+        text: String? = null,
+        replyMarkup: TLAbsReplyMarkup? = null,
+        entities: Array<TLAbsMessageEntity>
+    ) = client.editMessage(to.input, id, text, replyMarkup, entities)
+
+    fun delete(deleteForAll: Boolean = true) = client.delete(deleteForAll, id)
 
 }
