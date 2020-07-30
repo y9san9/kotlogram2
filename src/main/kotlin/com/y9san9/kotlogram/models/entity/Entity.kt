@@ -10,6 +10,7 @@ open class Entity (
         val client: KotlogramClient,
         val peer: Peer
 ) {
+    val id = peer.id
     fun sendMessage(
             text: String = "",
             silent: Boolean = false,
