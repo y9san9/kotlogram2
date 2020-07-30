@@ -4,7 +4,8 @@ import com.github.badoualy.telegram.api.Kotlogram
 import com.github.badoualy.telegram.api.TelegramApp
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
-import com.y9san9.kotlogram.entity.*
+import com.y9san9.kotlogram.models.entity.*
+import com.y9san9.kotlogram.models.markup.ReplyMarkup
 import com.y9san9.kotlogram.models.wrap
 import com.y9san9.kotlogram.storage.ApiStorage
 import com.y9san9.kotlogram.updates.UpdatesHandler
@@ -23,19 +24,19 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
     val client = Kotlogram.getDefaultClient(app, ApiStorage(sessionName), updateCallback = updateCallback)
 
     fun getChannel(id: Int): Channel? = cachedEntities.firstOrNull {
-        it is Channel && it.id == id
+        it is Channel && it.peer.id == id
     } as Channel? ?: (getChannelPrivate(id) as? TLChannel)?.let {
-        Channel(it).apply { cachedEntities.add(this) }
+        (it.wrap(this) as Channel).apply { cachedEntities.add(this) }
     }
 
     fun getChat(id: Int): Chat? = cachedEntities.firstOrNull {
-        it is Chat && it.id == id
+        it is Chat && it.peer.id == id
     } as Chat? ?: (getChannelPrivate(id) as? TLChat)?.let {
-        Chat(it).apply { cachedEntities.add(this) }
+        (it.wrap(this) as Chat).apply { cachedEntities.add(this) }
     }
 
     fun getUser(id: Int): User? = cachedEntities.firstOrNull {
-        it is User && it.id == id
+        it is User && it.peer.id == id
     } as User? ?: getUserPrivate(id)?.let {
         it.wrap(this).apply { cachedEntities.add(this) }
     }
@@ -80,13 +81,13 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
     } catch (_: RpcErrorException){ false }
 
     fun sendMessage(
-        to: TLAbsInputPeer,
-        text: String = "",
-        silent: Boolean = false,
-        clearDraft: Boolean = true,
-        replyTo: Int? = null,
-        replyMarkup: TLAbsReplyMarkup? = null,
-        entities: Array<TLAbsMessageEntity> = arrayOf()
+            to: TLAbsInputPeer,
+            text: String? = null,
+            silent: Boolean = false,
+            clearDraft: Boolean = true,
+            replyTo: Int? = null,
+            replyMarkup: ReplyMarkup? = null,
+            entities: Array<TLAbsMessageEntity> = arrayOf()
     ) = client.messagesSendMessage(
         true,
         silent,
@@ -96,7 +97,7 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         replyTo,
         text,
         Random.nextLong(),
-        replyMarkup,
+        replyMarkup?.unwrap(),
         vectorOf(*entities)
     ).let {  }
 
@@ -104,9 +105,11 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         to: TLAbsInputPeer,
         id: Int,
         text: String? = null,
-        replyMarkup: TLAbsReplyMarkup? = null,
+        replyMarkup: ReplyMarkup? = null,
         entities: Array<TLAbsMessageEntity>
-    ): Unit = client.messagesEditMessage(true, to, id, text, replyMarkup, vectorOf(*entities)).let { }
+    ): Unit = client.messagesEditMessage(
+            true, to, id, text, replyMarkup?.unwrap(), vectorOf(*entities)
+    ).let { }
 
     fun delete(deleteForAll: Boolean = true, vararg ids: Int): Unit = client.messagesDeleteMessages(
         deleteForAll, intVectorOf(*ids)

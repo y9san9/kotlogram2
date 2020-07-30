@@ -4,6 +4,8 @@ import com.github.badoualy.telegram.api.utils.*
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.core.TLVector
 import com.y9san9.kotlogram.KotlogramClient
+import com.y9san9.kotlogram.models.markup.ReplyMarkup
+import com.y9san9.kotlogram.models.markup.wrap
 
 
 fun TLAbsMessage.wrap(client: KotlogramClient) : Message = when(this){
@@ -80,8 +82,8 @@ class Message(
     val date = source.date
     val message: String? = source.message
     val media: TLAbsMessageMedia? = source.media
-    val replyMarkup: TLAbsReplyMarkup? = source.replyMarkup  // TODO: Markup wrapper
-    val entities: TLVector<TLAbsMessageEntity>? = source.entities
+    val replyMarkup: ReplyMarkup? = source.replyMarkup.wrap(client, this)
+    val entities: List<TLAbsMessageEntity>? = source.entities
     val views: Int? = source.views
     val editDate: Int? = source.editDate
 
@@ -89,7 +91,7 @@ class Message(
         text: String = "",
         silent: Boolean = false,
         clearDraft: Boolean = true,
-        replyMarkup: TLAbsReplyMarkup? = null,
+        replyMarkup: ReplyMarkup? = null,
         entities: Array<TLAbsMessageEntity> = arrayOf()
     ) = client.sendMessage(
         if(to.isUser && !out) from.source.toInputPeer() else to.input,
@@ -98,7 +100,7 @@ class Message(
 
     fun edit(
         text: String? = null,
-        replyMarkup: TLAbsReplyMarkup? = null,
+        replyMarkup: ReplyMarkup? = null,
         entities: Array<TLAbsMessageEntity>
     ) = client.editMessage(to.input, id, text, replyMarkup, entities)
 

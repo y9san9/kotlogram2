@@ -2,17 +2,12 @@ package com.y9san9.kotlogram.updates
 
 import com.github.badoualy.telegram.api.TelegramClient
 import com.github.badoualy.telegram.api.UpdateCallback
-import com.github.badoualy.telegram.api.utils.id
-import com.github.badoualy.telegram.api.utils.is1v1
-import com.github.badoualy.telegram.api.utils.isChannel
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.api.updates.TLDifference
-import com.github.badoualy.telegram.tl.api.updates.TLDifferenceSlice
 import com.y9san9.kotlogram.KotlogramClient
-import com.y9san9.kotlogram.entity.wrap
+import com.y9san9.kotlogram.models.entity.wrap
 import com.y9san9.kotlogram.models.Message
 import com.y9san9.kotlogram.models.wrap
-import com.y9san9.kotlogram.utils.assert
 
 
 class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {

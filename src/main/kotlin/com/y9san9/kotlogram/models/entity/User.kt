@@ -1,16 +1,15 @@
-package com.y9san9.kotlogram.entity
+package com.y9san9.kotlogram.models.entity
 
 import com.github.badoualy.telegram.api.utils.toInputPeer
-import com.github.badoualy.telegram.tl.api.TLAbsUser
-import com.github.badoualy.telegram.tl.api.TLAbsUserProfilePhoto
-import com.github.badoualy.telegram.tl.api.TLAbsUserStatus
-import com.github.badoualy.telegram.tl.api.TLUser
+import com.github.badoualy.telegram.tl.api.*
 import com.y9san9.kotlogram.KotlogramClient
+import com.y9san9.kotlogram.models.wrap
 
 
 class User(
-    val source: TLUser
-) : Entity(source.id) {
+        client: KotlogramClient,
+        val source: TLUser
+) : Entity(client, TLPeerUser(source.id).wrap(client)) {
     val self = source.self
     val contact = source.contact
     val mutualContact = source.mutualContact
@@ -35,5 +34,5 @@ class User(
     val langCode: String? = source.langCode
     val input = source.toInputPeer()
 }
-@Suppress("UNUSED_PARAMETER")
-fun TLAbsUser.wrap(client: KotlogramClient) = User(asUser)
+
+fun TLAbsUser.wrap(client: KotlogramClient) = User(client, asUser)

@@ -1,10 +1,10 @@
-package com.y9san9.kotlogram.models
+package com.y9san9.kotlogram.models.markup
 
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.core.TLVector
 import com.y9san9.kotlogram.KotlogramClient
+import com.y9san9.kotlogram.models.Message
 import com.y9san9.kotlogram.utils.vectorOf
-import java.util.*
 
 
 enum class Action {
@@ -19,12 +19,12 @@ class ReplyMarkup private constructor(
         val singleUse: Boolean,
         val selective: Boolean,
         val resize: Boolean,
-        private val buttons: List<List<TLAbsKeyboardButton>>
+        private val buttons: List<List<Button>>
 ){
     companion object {
         fun keyboard(
                 client: KotlogramClient,
-                buttons: List<List<TLAbsKeyboardButton>>,
+                buttons: List<List<Button>>,
                 singleUse: Boolean = true,
                 resize: Boolean = true,
                 selective: Boolean = true
@@ -32,7 +32,7 @@ class ReplyMarkup private constructor(
 
         fun inline(
                 client: KotlogramClient,
-                buttons: List<List<TLAbsKeyboardButton>>
+                buttons: List<List<Button>>
         ) = ReplyMarkup(client, Action.No, isInline = true, singleUse = true, selective = true, resize = true,
                 buttons = buttons)
 
@@ -61,17 +61,22 @@ class ReplyMarkup private constructor(
         else TLReplyKeyboardMarkup(resize, singleUse, selective, buttons.wrapWithVectors())
     }
 
-    private fun List<List<TLAbsKeyboardButton>>.wrapWithVectors() = vectorOf(*map { TLKeyboardButtonRow(
-            vectorOf(*it.toTypedArray())
+    private fun List<List<Button>>.wrapWithVectors() = vectorOf(*map { TLKeyboardButtonRow(
+            vectorOf(*it.map { button ->  button.unwrap() }.toTypedArray())
     ) }.toTypedArray())
 }
 
-fun TLAbsReplyMarkup.wrap(client: KotlogramClient) = when(this){
-    is TLReplyInlineMarkup -> ReplyMarkup.inline(client, rows.wrapWithList())
-    is TLReplyKeyboardMarkup -> ReplyMarkup.keyboard(client, rows.wrapWithList(), singleUse, resize, selective)
+fun TLAbsReplyMarkup.wrap(client: KotlogramClient, message: Message) = when(this){
+    is TLReplyInlineMarkup -> ReplyMarkup.inline(client, rows.wrapWithList(message))
+    is TLReplyKeyboardMarkup -> ReplyMarkup.keyboard(client, rows.wrapWithList(message), singleUse, resize, selective)
     is TLReplyKeyboardForceReply -> ReplyMarkup.forceReply(singleUse, selective)
     is TLReplyKeyboardHide -> ReplyMarkup.hide(selective)
     else -> throw UnsupportedOperationException()
 }
 
-private fun TLVector<TLKeyboardButtonRow>.wrapWithList() = map { it.buttons }
+private fun TLVector<TLKeyboardButtonRow>.wrapWithList(message: Message)
+        = map { it.buttons.map { button -> button.wrap(message) } }
+
+private fun List<List<TLAbsKeyboardButton>>.wrap(message: Message?)
+        = map { it.map { button -> button.wrap(message) } }
+

@@ -1,13 +1,17 @@
-package com.y9san9.kotlogram.entity
+package com.y9san9.kotlogram.models.entity
 
 import com.github.badoualy.telegram.api.utils.toInputPeer
 import com.github.badoualy.telegram.tl.api.TLAbsChatPhoto
 import com.github.badoualy.telegram.tl.api.TLChannel
+import com.github.badoualy.telegram.tl.api.TLPeerChannel
+import com.y9san9.kotlogram.KotlogramClient
+import com.y9san9.kotlogram.models.wrap
 
 
 class Channel(
-    val source: TLChannel
-) : Entity(source.id){
+        client: KotlogramClient,
+        val source: TLChannel
+) : Entity(client, TLPeerChannel(source.id).wrap(client)){
     val creator = source.creator
     val kicked = source.kicked
     val left = source.left
