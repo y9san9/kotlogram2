@@ -1,3 +1,4 @@
+[![](https://jitpack.io/v/y9san9/kotlogram-wrapper.svg)](https://jitpack.io/#y9san9/kotlogram-wrapper)
 # kotlogram-wrapper
 Kotlogram wrapper. Now in developing, write to https://t.me/y9san9 to implement something
 ## Installation (Gradle)
