@@ -1,9 +1,9 @@
 package com.y9san9.kotlogram
 
 import com.github.badoualy.telegram.api.Kotlogram
-import com.github.badoualy.telegram.api.TelegramApp
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
+import com.y9san9.kotlogram.models.TelegramApp
 import com.y9san9.kotlogram.models.entity.*
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
 import com.y9san9.kotlogram.models.wrap
@@ -21,7 +21,9 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
     fun updates(handler: UpdatesHandler.UpdateDSL.() -> Unit) = updateCallback.handler(handler)
 
     @Suppress("MemberVisibilityCanBePrivate")
-    val client = Kotlogram.getDefaultClient(app, ApiStorage(sessionName), updateCallback = updateCallback)
+    val client = Kotlogram.getDefaultClient(
+            app.toKotlogramApp(), ApiStorage(sessionName), updateCallback = updateCallback
+    )
 
     fun getChannel(id: Int): Channel? = cachedEntities.firstOrNull {
         it is Channel && it.peer.id == id
