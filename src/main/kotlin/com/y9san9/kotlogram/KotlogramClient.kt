@@ -39,7 +39,7 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
                         user -> user.wrap(this)
                     } ?: listOf())
             )
-        }.peer.wrap(this)
+        }.peer.wrap(this).entity
     } catch (_: RpcErrorException) {
         null
     }

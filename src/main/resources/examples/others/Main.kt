@@ -5,6 +5,6 @@ import examples.client
 
 
 fun main() {
-    val channel = client.getByUsername("username")!!.entity as Channel
+    val channel = client.getByUsername("username") as Channel
     client.join(channel)
 }
