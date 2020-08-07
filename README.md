@@ -8,7 +8,7 @@ repositories {
 }
 dependencies {
     implementation 'com.github.y9san9:kotlogram-wrapper:-SNAPSHOT'
-    implementation 'com.github.badoualy:kotlogram:1.0.0-RC3'
+    implementation 'com.github.y9san9:kotlogram:-SNAPSHOT'
 }
 ```
 ## Pro way (Kotlin Gradle DSL)
@@ -34,7 +34,7 @@ repositories {
     jitpack()
 }
 dependencies {
-    github("badoualy/kotlogram", "1.0.0-RC3")
+    github("y9san9/kotlogram")
     github("y9san9/kotlogram-wrapper")
 }
 ```
