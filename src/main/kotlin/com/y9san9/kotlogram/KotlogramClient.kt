@@ -29,6 +29,21 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         (it.wrap(this) as Channel).apply { cachedEntities.add(this) }
     }
 
+    fun getByUsername(username: String) = try {
+        client.contactsResolveUsername(username).also {
+            cachedEntities.addAll(
+                    (it.chats?.mapNotNull {
+                        entity -> entity.wrap(this)
+                    } ?: listOf())
+                            + (it.users?.mapNotNull {
+                        user -> user.wrap(this)
+                    } ?: listOf())
+            )
+        }.peer.wrap(this)
+    } catch (_: RpcErrorException) {
+        null
+    }
+
     fun getChat(id: Int): Chat? = cachedEntities.firstOrNull {
         it is Chat && it.peer.id == id
     } as Chat? ?: (getChannelPrivate(id) as? TLChat)?.let {
@@ -89,16 +104,8 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
             replyMarkup: ReplyMarkup? = null,
             entities: Array<TLAbsMessageEntity> = arrayOf()
     ) = client.messagesSendMessage(
-        true,
-        silent,
-        false,
-        clearDraft,
-        to,
-        replyTo,
-        text,
-        Random.nextLong(),
-        replyMarkup?.unwrap(),
-        vectorOf(*entities)
+        true, silent, false, clearDraft, to, replyTo, text,
+            Random.nextLong(), replyMarkup?.unwrap(), vectorOf(*entities)
     ).let {  }
 
     fun editMessage(
@@ -107,12 +114,20 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         text: String? = null,
         replyMarkup: ReplyMarkup? = null,
         entities: Array<TLAbsMessageEntity>
-    ): Unit = client.messagesEditMessage(
+    ) = client.messagesEditMessage(
             true, to, id, text, replyMarkup?.unwrap(), vectorOf(*entities)
     ).let { }
 
-    fun delete(deleteForAll: Boolean = true, vararg ids: Int): Unit = client.messagesDeleteMessages(
+    fun deleteMessage(deleteForAll: Boolean = true, vararg ids: Int): Unit = client.messagesDeleteMessages(
         deleteForAll, intVectorOf(*ids)
     ).let { }
+
+    fun join(channel: Channel) = join(channel.source.id, channel.source.accessHash)
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun join(channelId: Int, accessHash: Long = 0) = join(TLInputChannel(channelId, accessHash))
+    private fun join(channel: TLInputChannel) = client.channelsJoinChannel(channel).let { }
+    fun join(inviteLink: String) = joinByInviteHash(inviteLink.replaceFirst("https://t.me/joinchat/", ""))
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun joinByInviteHash(hash: String) = client.messagesImportChatInvite(hash).let { }
 
 }

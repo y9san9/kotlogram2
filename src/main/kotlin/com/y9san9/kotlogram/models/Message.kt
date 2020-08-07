@@ -2,7 +2,6 @@ package com.y9san9.kotlogram.models
 
 import com.github.badoualy.telegram.api.utils.*
 import com.github.badoualy.telegram.tl.api.*
-import com.github.badoualy.telegram.tl.core.TLVector
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
 import com.y9san9.kotlogram.models.markup.wrap
@@ -104,6 +103,6 @@ class Message(
         entities: Array<TLAbsMessageEntity>
     ) = client.editMessage(to.input, id, text, replyMarkup, entities)
 
-    fun delete(deleteForAll: Boolean = true) = client.delete(deleteForAll, id)
+    fun delete(deleteForAll: Boolean = true) = client.deleteMessage(deleteForAll, id)
 
 }
