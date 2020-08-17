@@ -2,8 +2,8 @@
 <p align="center">
     An convinient wrapper for <a href="https://github.com/y9san9/kotlogram">kotlogram</a>
     <br><br>
-    <img alt="HoC" src="https://hitsofcode.com/github/y9san9/kotlogram2?branch=master"/>
     <img alt="LoC" src="https://tokei.rs/b1/github/y9san9/kotlogram2"/>
+    <img alt="HoC" src="https://hitsofcode.com/github/y9san9/kotlogram2?branch=master"/>
 </p><br>
 
 ## 🚩 TODO
