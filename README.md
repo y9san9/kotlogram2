@@ -1,19 +1,27 @@
+<h1 align="center">Welcome to kotlogram2 👋</h1>
+<p align="center">An convinient wrapper for <a href="https://github.com/y9san9/kotlogram">kotlogram</a>. </p><br>
+
 [![Hits-of-Code](https://hitsofcode.com/github/y9san9/kotlogram-wrapper?branch=master)](https://hitsofcode.com/view/github/y9san9/kotlogram-wrapper?branch=master)
 ![](https://tokei.rs/b1/github/y9san9/kotlogram-wrapper)
-# kotlogram-wrapper
-Kotlogram wrapper. Now in developing, write to https://t.me/y9san9 to implement something
-## Installation (Gradle) [![](https://jitpack.io/v/y9san9/kotlogram-wrapper.svg)](https://jitpack.io/#y9san9/kotlogram-wrapper) 
+
+## 🚩 TODO
+- bot auth support
+- wrap all api with convinient functions and models
+- upgrade api layer to latest
+
+
+## 🚀 Installation (Gradle) [![](https://jitpack.io/v/y9san9/kotlogram-wrapper.svg)](https://jitpack.io/#y9san9/kotlogram-wrapper) 
 
 ```gradle
 repositories {
     maven { url "https://jitpack.io" }  // Connecting jitpack to import github repos
 }
 dependencies {
-    implementation 'com.github.y9san9:kotlogram-wrapper:-SNAPSHOT'
-    implementation 'com.github.y9san9:kotlogram:-SNAPSHOT'
+    implementation 'com.github.y9san9:kotlogram2:-SNAPSHOT'
+    implementation 'com.github.y9san9:kotlogram:-SNAPSHOT'  // should be implemented to use unwrapped api
 }
 ```
-## Pro way (Kotlin Gradle DSL)
+## 🔥 Pro way (Kotlin Gradle DSL)
 Add this 2 functions to top of your build.gradle.kts
 ```kotlin
 /**
@@ -36,8 +44,8 @@ repositories {
     jitpack()
 }
 dependencies {
-    github("y9san9/kotlogram")
-    github("y9san9/kotlogram-wrapper")
+    github("y9san9/kotlogram")  // should be implemented to use unwrapped api
+    github("y9san9/kotlogram2")
 }
 ```
 The project is in beta, so public api can be changed any time. For stable work use releases instead of -SNAPSHOT<br>
