@@ -1,9 +1,9 @@
-[![](https://jitpack.io/v/y9san9/kotlogram-wrapper.svg)](https://jitpack.io/#y9san9/kotlogram-wrapper) 
 [![Hits-of-Code](https://hitsofcode.com/github/y9san9/kotlogram-wrapper?branch=master)](https://hitsofcode.com/view/github/y9san9/kotlogram-wrapper?branch=master)
 ![](https://tokei.rs/b1/github/y9san9/kotlogram-wrapper)
 # kotlogram-wrapper
 Kotlogram wrapper. Now in developing, write to https://t.me/y9san9 to implement something
-## Installation (Gradle)
+## Installation (Gradle) [![](https://jitpack.io/v/y9san9/kotlogram-wrapper.svg)](https://jitpack.io/#y9san9/kotlogram-wrapper) 
+
 ```gradle
 repositories {
     maven { url "https://jitpack.io" }  // Connecting jitpack to import github repos
