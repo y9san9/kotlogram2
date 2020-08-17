@@ -16,6 +16,7 @@
 - bot auth support
 - wrap all api with convinient functions and models
 - upgrade api layer to latest
+- cover code with tests
 
 
 ## 🚀 Installation (Gradle) [![](https://jitpack.io/v/y9san9/kotlogram2.svg)](https://jitpack.io/#y9san9/kotlogram2) 
