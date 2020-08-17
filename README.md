@@ -10,9 +10,7 @@
     <br><br>
     <img alt="LoC" src="https://tokei.rs/b1/github/y9san9/kotlogram2"/>
     <img alt="HoC" src="https://hitsofcode.com/github/y9san9/kotlogram2?branch=master"/>
-</p><br>
-
-
+</p>
 
 ## 🚩 TODO
 - bot auth support
