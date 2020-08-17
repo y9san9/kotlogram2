@@ -1,8 +1,8 @@
 <h1 align="center">Welcome to kotlogram2 👋</h1>
 <p align="center">An convinient wrapper for <a href="https://github.com/y9san9/kotlogram">kotlogram</a>. </p><br>
 
-[![Hits-of-Code](https://hitsofcode.com/github/y9san9/kotlogram-wrapper?branch=master)](https://hitsofcode.com/view/github/y9san9/kotlogram-wrapper?branch=master)
-![](https://tokei.rs/b1/github/y9san9/kotlogram-wrapper)
+[![Hits-of-Code](https://hitsofcode.com/github/y9san9/kotlogram2?branch=master)](https://hitsofcode.com/view/github/y9san9/kotlogram2?branch=master) 
+![](https://tokei.rs/b1/github/y9san9/kotlogram2)
 
 ## 🚩 TODO
 - bot auth support
@@ -10,7 +10,7 @@
 - upgrade api layer to latest
 
 
-## 🚀 Installation (Gradle) [![](https://jitpack.io/v/y9san9/kotlogram-wrapper.svg)](https://jitpack.io/#y9san9/kotlogram-wrapper) 
+## 🚀 Installation (Gradle) [![](https://jitpack.io/v/y9san9/kotlogram2.svg)](https://jitpack.io/#y9san9/kotlogram2) 
 
 ```gradle
 repositories {
@@ -26,7 +26,7 @@ Add this 2 functions to top of your build.gradle.kts
 ```kotlin
 /**
  * Import github repo; first add [jitpack] to repos
- * @param repo username/repo; e.g. y9san9/kotlogram-wrapper
+ * @param repo username/repo; e.g. y9san9/kotlogram2
  */
 fun DependencyHandlerScope.github(repo: String, tag: String = "-SNAPSHOT") = implementation(
         repo.split("/").let { (username, repo) ->
@@ -49,4 +49,4 @@ dependencies {
 }
 ```
 The project is in beta, so public api can be changed any time. For stable work use releases instead of -SNAPSHOT<br>
-See: [examples](https://github.com/y9san9/kotlogram-wrapper/tree/master/src/main/resources/examples)
+See: [examples](https://github.com/y9san9/kotlogram2/tree/master/src/main/resources/examples)
