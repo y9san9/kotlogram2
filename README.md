@@ -6,7 +6,7 @@
     <img alt="Licence" src="https://img.shields.io/github/license/y9san9/kotlogram2.svg"/>
     <img alt="Issues" src="https://img.shields.io/github/issues/y9san9/kotlogram2.svg"/>
     <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
-    <a href="https://hits.seeyoufarm.com"/><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fy9san9%2Fkotlogram2"/></a><br>
+    <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/y9san9/kotlogram2&title=views%20daily/total" alt="Views" />
     <br>
     <img alt="LoC" src="https://tokei.rs/b1/github/y9san9/kotlogram2"/>
     <img alt="HoC" src="https://hitsofcode.com/github/y9san9/kotlogram2?branch=master"/>
