@@ -58,4 +58,4 @@ dependencies {
 }
 ```
 The project is in beta, so public api can be changed any time. For stable work use releases instead of -SNAPSHOT<br>
-See: [examples](https://github.com/y9san9/kotlogram2/tree/master/src/main/resources/examples)
+See: [wiki](https://github.com/y9san9/kotlogram2/wiki), [examples](https://github.com/y9san9/kotlogram2/tree/master/src/main/resources/examples)
