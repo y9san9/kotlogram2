@@ -2,10 +2,10 @@
 <p align="center">
     An convinient wrapper for <a href="https://github.com/y9san9/kotlogram">kotlogram</a>
     <br><br>
-    <img alt="Code quality" src="https://codeclimate.com/github/y9san9/kotlogram2/badges/gpa.svg"/>
-    <img alt="Licence" src="https://img.shields.io/github/license/y9san9/kotlogram2.svg"/>
-    <img alt="Issues" src="https://img.shields.io/github/issues/y9san9/kotlogram2.svg"/>
-    <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
+    <a href="https://codeclimate.com/github/y9san9/kotlogram2/"><img alt="Code quality" src="https://codeclimate.com/github/y9san9/kotlogram2/badges/gpa.svg"/></a>
+    <a href="https://github.com/y9san9/kotlogram2/blob/master/LICENSE"><img alt="Licence" src="https://img.shields.io/github/license/y9san9/kotlogram2.svg"/></a>
+    <a hred="https://github.com/y9san9/kotlogram2/issues"><img alt="Issues" src="https://img.shields.io/github/issues/y9san9/kotlogram2.svg"/></a>
+    <a href="https://github.com/y9san9/kotlogram2/pulls"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
     <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/y9san9/kotlogram2&title=views%20daily/total" alt="Views" />
     <br><br>
     <img alt="LoC" src="https://tokei.rs/b1/github/y9san9/kotlogram2"/>
