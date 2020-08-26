@@ -6,32 +6,31 @@ import com.github.badoualy.telegram.mtproto.model.DataCenter
 import com.github.badoualy.telegram.mtproto.model.MTSession
 import com.y9san9.kds.KDataStorage
 import com.y9san9.kds.commit
-
-private object Storage : KDataStorage() {
-    var authKey by property<ByteArray>()
-    var dataCenter by property<String>()
-    var session by property<MTSession>()
-}
+import java.io.File
 
 //TODO: Remove constructor parameter or add creating custom path feature to kds
-class ApiStorage(name: String = "") : TelegramApiStorage {
-    /*private val authKeyFile = File(System.getProperty("user.dir"), "properties/auth$${name}.key")
-    private val nearestDCFile = File(System.getProperty("user.dir"), "properties/dc$${name}.save")*/
+class ApiStorage(private val name: String = "") : TelegramApiStorage {
+    private val storage = object : KDataStorage(File(System.getProperty("user.dir"), name)) {
+        var authKey by property<ByteArray>()
+        var dataCenter by property<String>()
+        var session by property<MTSession>()
+    }
 
-    override fun saveAuthKey(authKey: AuthKey) = Storage.commit { this.authKey = authKey.key }
-    override fun loadAuthKey() = AuthKey(Storage.authKey)
+    override fun saveAuthKey(authKey: AuthKey) = storage.commit { this.authKey = authKey.key }
+    override fun loadAuthKey() = AuthKey(storage.authKey)
 
-    override fun saveDc(dataCenter: DataCenter) = Storage.commit { this.dataCenter = dataCenter.toString() }
-    override fun loadDc() = Storage.dataCenter.split(":").let { (ip, port) ->
+    override fun saveDc(dataCenter: DataCenter) = storage.commit { this.dataCenter = dataCenter.toString() }
+    override fun loadDc() = storage.dataCenter.split(":").let { (ip, port) ->
         DataCenter(ip, port.toInt())
     }
 
     //TODO: Create delete function for kds
-    override fun deleteAuthKey() { }
-    override fun deleteDc() { }
+    override fun deleteAuthKey() {}
+    override fun deleteDc() {}
 
-    override fun saveSession(session: MTSession?) = Storage.commit {
+    override fun saveSession(session: MTSession?) = storage.commit {
         this.session = session!!
     }
-    override fun loadSession(): MTSession? = Storage.session
+
+    override fun loadSession(): MTSession? = storage.session
 }
