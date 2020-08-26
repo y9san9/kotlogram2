@@ -29,6 +29,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     github("y9san9/kotlogram", "v2")
+    github("y9san9/kotlin-data-storage")
 }
 
 configure<JavaPluginConvention> {
