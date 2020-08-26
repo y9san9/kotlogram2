@@ -1,5 +1,3 @@
-@file: Suppress("SpellCheckingInspection", "unused")
-
 package com.y9san9.kotlogram
 
 import com.github.badoualy.telegram.api.Kotlogram

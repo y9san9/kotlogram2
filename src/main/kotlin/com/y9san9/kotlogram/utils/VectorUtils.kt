@@ -1,5 +1,3 @@
-@file: Suppress("SpellCheckingInspection")
-
 package com.y9san9.kotlogram.utils
 
 import com.github.badoualy.telegram.tl.core.TLIntVector

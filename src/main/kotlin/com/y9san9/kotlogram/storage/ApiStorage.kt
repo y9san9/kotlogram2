@@ -8,7 +8,6 @@ import com.y9san9.kds.KDataStorage
 import com.y9san9.kds.commit
 import java.io.File
 
-//TODO: Remove constructor parameter or add creating custom path feature to kds
 class ApiStorage(private val name: String = "") : TelegramApiStorage {
     private val storage = object : KDataStorage(File(System.getProperty("user.dir"), name)) {
         var authKey by property<ByteArray>()

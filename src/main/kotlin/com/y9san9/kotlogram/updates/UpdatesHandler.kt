@@ -1,5 +1,3 @@
-@file: Suppress("unused")
-
 package com.y9san9.kotlogram.updates
 
 import com.github.badoualy.telegram.api.TelegramClient

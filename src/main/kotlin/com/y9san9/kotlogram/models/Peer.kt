@@ -1,5 +1,3 @@
-@file: Suppress("unused")
-
 package com.y9san9.kotlogram.models
 
 import com.github.badoualy.telegram.api.utils.id
