@@ -1,3 +1,5 @@
+@file: Suppress("unused")
+
 package com.y9san9.kotlogram.models.entity
 
 import com.github.badoualy.telegram.api.utils.toInputPeer
@@ -7,7 +9,6 @@ import com.github.badoualy.telegram.tl.api.TLChat
 import com.github.badoualy.telegram.tl.api.TLPeerChat
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.wrap
-
 
 class Chat(
         client: KotlogramClient,

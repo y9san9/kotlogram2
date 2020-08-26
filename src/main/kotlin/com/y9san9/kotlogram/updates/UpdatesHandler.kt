@@ -1,3 +1,5 @@
+@file: Suppress("unused")
+
 package com.y9san9.kotlogram.updates
 
 import com.github.badoualy.telegram.api.TelegramClient
@@ -8,7 +10,6 @@ import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.entity.wrap
 import com.y9san9.kotlogram.models.Message
 import com.y9san9.kotlogram.models.wrap
-
 
 class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
     private var realHandler = UpdateDSL(client)

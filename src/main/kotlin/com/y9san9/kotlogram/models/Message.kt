@@ -1,3 +1,5 @@
+@file: Suppress("unused")
+
 package com.y9san9.kotlogram.models
 
 import com.github.badoualy.telegram.api.utils.*
@@ -5,7 +7,6 @@ import com.github.badoualy.telegram.tl.api.*
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
 import com.y9san9.kotlogram.models.markup.wrap
-
 
 fun TLAbsMessage.wrap(client: KotlogramClient) : Message = when(this){
     is TLMessage -> Message(client, this, null)

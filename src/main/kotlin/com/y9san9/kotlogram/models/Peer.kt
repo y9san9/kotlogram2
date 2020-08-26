@@ -1,3 +1,5 @@
+@file: Suppress("unused")
+
 package com.y9san9.kotlogram.models
 
 import com.github.badoualy.telegram.api.utils.id
@@ -7,7 +9,6 @@ import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.entity.Channel
 import com.y9san9.kotlogram.models.entity.Chat
 import com.y9san9.kotlogram.models.entity.User
-
 
 class Peer(client: KotlogramClient, source: TLAbsPeer){
     @Suppress("MemberVisibilityCanBePrivate")

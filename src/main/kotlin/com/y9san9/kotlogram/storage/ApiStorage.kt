@@ -8,7 +8,6 @@ import com.y9san9.kotlogram.utils.refresh
 import java.io.File
 import java.io.FileNotFoundException
 
-
 class ApiStorage(name: String = "") : TelegramApiStorage {
     private val authKeyFile = File(System.getProperty("user.dir"),"properties/auth$${name}.key")
     private val nearestDCFile = File(System.getProperty("user.dir"),"properties/dc$${name}.save")

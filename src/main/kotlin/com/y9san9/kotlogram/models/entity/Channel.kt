@@ -1,3 +1,5 @@
+@file: Suppress("SpellCheckingInspection", "unused")
+
 package com.y9san9.kotlogram.models.entity
 
 import com.github.badoualy.telegram.api.utils.toInputPeer
@@ -6,7 +8,6 @@ import com.github.badoualy.telegram.tl.api.TLChannel
 import com.github.badoualy.telegram.tl.api.TLPeerChannel
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.wrap
-
 
 class Channel(
         client: KotlogramClient,
