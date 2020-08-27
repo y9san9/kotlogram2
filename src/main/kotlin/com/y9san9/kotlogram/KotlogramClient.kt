@@ -13,7 +13,6 @@ import com.y9san9.kotlogram.utils.intVectorOf
 import com.y9san9.kotlogram.utils.vectorOf
 import kotlin.random.Random
 
-
 class KotlogramClient(app: TelegramApp, sessionName: String = "") {
     internal val cachedEntities = mutableListOf<Entity>()
 
@@ -69,6 +68,7 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         it.wrap(this)
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun auth(
         phone: String,
         passwordHandler: () -> String = {
@@ -125,11 +125,14 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
     ).let { }
 
     fun join(channel: Channel) = join(channel.source.id, channel.source.accessHash)
+
     @Suppress("MemberVisibilityCanBePrivate")
     fun join(channelId: Int, accessHash: Long = 0) = join(TLInputChannel(channelId, accessHash))
-    private fun join(channel: TLInputChannel) = client.channelsJoinChannel(channel).let { }
+
     fun join(inviteLink: String) = joinByInviteHash(inviteLink.replaceFirst("https://t.me/joinchat/", ""))
+
     @Suppress("MemberVisibilityCanBePrivate")
     fun joinByInviteHash(hash: String) = client.messagesImportChatInvite(hash).let { }
 
+    private fun join(channel: TLInputChannel) = client.channelsJoinChannel(channel).let { }
 }
