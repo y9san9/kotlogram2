@@ -7,11 +7,11 @@ fun DependencyHandlerScope.github(repo: String, tag: String = "-SNAPSHOT") = imp
             "com.github.${username}:${repo}:${tag}"
         }
 )
+
 /**
  * Jitpack maven
  */
 fun RepositoryHandler.jitpack() = maven("https://jitpack.io")
-
 
 plugins {
     kotlin("jvm") version "1.3.72"
@@ -29,13 +29,12 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     github("y9san9/kotlogram", "v2")
-    github("y9san9/kotlin-data-storage")
+    github("y9san9/kotlin-data-storage", "stable-3")
 }
 
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
-
 
 val fatJar = task("fatJar", type = Jar::class) {
     @Suppress("UnstableApiUsage")

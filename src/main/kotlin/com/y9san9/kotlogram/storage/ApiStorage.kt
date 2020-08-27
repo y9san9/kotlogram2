@@ -10,25 +10,34 @@ import java.io.File
 
 class ApiStorage(private val name: String = "") : TelegramApiStorage {
     private val storage = object : KDataStorage(File(System.getProperty("user.dir"), name)) {
-        var authKey by property<ByteArray>()
-        var dataCenter by property<String>()
-        var session by property<MTSession>()
+        var authKey by property<ByteArray?>()
+        var dataCenterIp by property<String?>()
+        var dataCenterPort by property<Int?>()
+        var session by property<MTSession?>()
     }
 
     override fun saveAuthKey(authKey: AuthKey) = storage.commit { this.authKey = authKey.key }
-    override fun loadAuthKey() = AuthKey(storage.authKey)
+    override fun loadAuthKey() = storage.authKey?.let { AuthKey(it) }
 
-    override fun saveDc(dataCenter: DataCenter) = storage.commit { this.dataCenter = dataCenter.toString() }
-    override fun loadDc() = storage.dataCenter.split(":").let { (ip, port) ->
-        DataCenter(ip, port.toInt())
+    override fun saveDc(dataCenter: DataCenter) = dataCenter.toString().split(":")
+        .let { (ip, port) ->
+            storage.commit {
+                dataCenterIp = ip
+                dataCenterPort = port.toInt()
+            }
+        }
+
+    override fun loadDc() =
+        storage.dataCenterIp?.let { ip -> storage.dataCenterPort?.let { port -> DataCenter(ip, port) } }
+
+    override fun deleteAuthKey() = storage.commit { authKey = null }
+    override fun deleteDc() = storage.commit {
+        dataCenterIp = null
+        dataCenterPort = null
     }
 
-    //TODO: Create delete function for kds
-    override fun deleteAuthKey() {}
-    override fun deleteDc() {}
-
     override fun saveSession(session: MTSession?) = storage.commit {
-        this.session = session!!
+        this.session = session
     }
 
     override fun loadSession(): MTSession? = storage.session
