@@ -32,4 +32,7 @@ class Channel(
     val version = source.version
     val restrictionReason: String? = source.restrictionReason
     val input by lazy { source.toInputPeer()!! }
+
+    fun kick(user: User, kicked: Boolean = true) = client.kick(this, user, kicked)
+
 }

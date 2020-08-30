@@ -26,8 +26,7 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
             val difference = client.updatesGetDifference(pts - ptsCount, null, date, 0)
         ){
             is TLDifference -> {
-                this.client.cachedEntities.addAll(difference.users.map { it.wrap(this.client) })
-                this.client.cachedEntities.addAll(difference.chats.mapNotNull { it.wrap(this.client) })
+                this.client.addEntities(difference.users, difference.chats)
                 realHandler(
                     *(difference.newMessages.map { TLUpdateNewMessage(it, pts, ptsCount) }
                             + difference.otherUpdates.toList()).toTypedArray()
@@ -43,14 +42,12 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
     override fun onUpdateTooLong(client: TelegramClient) = TODO()
 
     override fun onUpdates(client: TelegramClient, updates: TLUpdates) {
-        this.client.cachedEntities.addAll(updates.users.map { it.wrap(this.client) })
-        this.client.cachedEntities.addAll(updates.chats.mapNotNull { it.wrap(this.client) })
+        this.client.addEntities(updates.users, updates.chats)
         realHandler(*updates.updates.toTypedArray())
     }
 
     override fun onUpdatesCombined(client: TelegramClient, updates: TLUpdatesCombined) {
-        this.client.cachedEntities.addAll(updates.users.map { it.wrap(this.client) })
-        this.client.cachedEntities.addAll(updates.chats.mapNotNull { it.wrap(this.client) })
+        this.client.addEntities(updates.users, updates.chats)
         realHandler(*updates.updates.toTypedArray())
     }
 

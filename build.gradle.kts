@@ -39,7 +39,7 @@ configure<JavaPluginConvention> {
 val fatJar = task("fatJar", type = Jar::class) {
     @Suppress("UnstableApiUsage")
     manifest {
-        attributes["Implementation-Title"] = "kotlogram-wrapper"
+        attributes["Implementation-Title"] = "kotlogram2"
     }
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     with(tasks.jar.get() as CopySpec)

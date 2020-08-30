@@ -2,9 +2,11 @@ package com.y9san9.kotlogram
 
 import com.github.badoualy.telegram.api.Kotlogram
 import com.github.badoualy.telegram.tl.api.*
+import com.github.badoualy.telegram.tl.core.TLVector
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
 import com.y9san9.kotlogram.models.TelegramApp
 import com.y9san9.kotlogram.models.entity.*
+import com.y9san9.kotlogram.models.extentions.input
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
 import com.y9san9.kotlogram.models.wrap
 import com.y9san9.kotlogram.storage.ApiStorage
@@ -15,7 +17,15 @@ import kotlin.random.Random
 
 
 class KotlogramClient(app: TelegramApp, sessionName: String = "") {
-    internal val cachedEntities = mutableListOf<Entity>()
+    private val cachedEntities = mutableListOf<Entity>()
+    internal fun addEntities(users: TLVector<TLAbsUser>? = null, chats: TLVector<TLAbsChat>? = null) {
+        users?.let {
+            cachedEntities.addAll(users.map { it.wrap(this) })
+        }
+        chats?.let {
+            cachedEntities.addAll(chats.mapNotNull { it.wrap(this) })
+        }
+    }
 
     private val updateCallback = UpdatesHandler(this)
     fun updates(handler: UpdatesHandler.UpdateDSL.() -> Unit) = updateCallback.handler(handler)
@@ -33,14 +43,7 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
 
     fun getByUsername(username: String) = try {
         client.contactsResolveUsername(username).also {
-            cachedEntities.addAll(
-                    (it.chats?.mapNotNull {
-                        entity -> entity.wrap(this)
-                    } ?: listOf())
-                            + (it.users?.mapNotNull {
-                        user -> user.wrap(this)
-                    } ?: listOf())
-            )
+            addEntities(it.users, it.chats)
         }.peer.wrap(this).entity
     } catch (_: RpcErrorException) {
         null
@@ -97,6 +100,9 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         true
     } catch (_: RpcErrorException){ false }
 
+
+    /* MESSAGE METHODS */
+
     fun sendMessage(
             to: TLAbsInputPeer,
             text: String? = null,
@@ -124,6 +130,9 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         deleteForAll, intVectorOf(*ids)
     ).let { }
 
+
+    /* CHANNEL METHODS */
+
     fun join(channel: Channel) = join(channel.source.id, channel.source.accessHash)
     @Suppress("MemberVisibilityCanBePrivate")
     fun join(channelId: Int, accessHash: Long = 0) = join(TLInputChannel(channelId, accessHash))
@@ -131,5 +140,8 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
     fun join(inviteLink: String) = joinByInviteHash(inviteLink.replaceFirst("https://t.me/joinchat/", ""))
     @Suppress("MemberVisibilityCanBePrivate")
     fun joinByInviteHash(hash: String) = client.messagesImportChatInvite(hash).let { }
-
+    
+    fun kick(channel: Channel, user: User, kicked: Boolean = true) {
+        client.channelsKickFromChannel(channel.source.input, user.source.input, kicked)
+    }
 }

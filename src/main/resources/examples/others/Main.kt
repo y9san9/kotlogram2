@@ -5,6 +5,6 @@ import examples.client
 
 
 fun main() {
-    val channel = client.getByUsername("username") as Channel
-    client.join(channel)
+    val channel = client.getByUsername("b0mb3r4at") as Channel
+    println(channel.title)
 }
