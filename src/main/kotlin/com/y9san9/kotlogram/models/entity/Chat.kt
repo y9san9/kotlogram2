@@ -8,7 +8,6 @@ import com.github.badoualy.telegram.tl.api.TLPeerChat
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.wrap
 
-
 class Chat(
         client: KotlogramClient,
         val source: TLChat

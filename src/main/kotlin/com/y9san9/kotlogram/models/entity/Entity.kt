@@ -5,7 +5,6 @@ import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.Peer
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
 
-
 open class Entity (
         val client: KotlogramClient,
         val peer: Peer

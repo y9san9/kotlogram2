@@ -5,7 +5,6 @@ import com.github.badoualy.telegram.tl.api.*
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.wrap
 
-
 class User(
         client: KotlogramClient,
         val source: TLUser

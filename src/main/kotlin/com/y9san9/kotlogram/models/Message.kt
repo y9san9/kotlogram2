@@ -6,7 +6,6 @@ import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
 import com.y9san9.kotlogram.models.markup.wrap
 
-
 fun TLAbsMessage.wrap(client: KotlogramClient) : Message = when(this){
     is TLMessage -> Message(client, this, null)
     is TLMessageService -> Message(client, TLMessage(

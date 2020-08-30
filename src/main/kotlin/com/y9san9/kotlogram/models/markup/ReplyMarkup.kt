@@ -6,7 +6,6 @@ import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.Message
 import com.y9san9.kotlogram.utils.vectorOf
 
-
 enum class Action {
     No, Hide, Reply
 }
@@ -79,4 +78,3 @@ private fun TLVector<TLKeyboardButtonRow>.wrapWithList(message: Message)
 
 private fun List<List<TLAbsKeyboardButton>>.wrap(message: Message?)
         = map { it.map { button -> button.wrap(message) } }
-

@@ -2,10 +2,7 @@ package com.y9san9.kotlogram.models.markup
 
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.core.TLBytes
-import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.Message
-import javax.swing.plaf.ButtonUI
-
 
 enum class ButtonType {
     Button, ButtonBuy, ButtonCallback, ButtonGame, ButtonRequestGeoLocation,
