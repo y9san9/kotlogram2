@@ -2,4 +2,5 @@
 /.gradle/
 /build/
 /properties/
+/data/
 /src/main/resources/examples/Client.kt

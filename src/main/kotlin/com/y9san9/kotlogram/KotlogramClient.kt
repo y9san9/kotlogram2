@@ -4,6 +4,7 @@ import com.github.badoualy.telegram.api.Kotlogram
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.core.TLVector
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
+import com.y9san9.kotlogram.dsl.auth.AuthDSL
 import com.y9san9.kotlogram.models.TelegramApp
 import com.y9san9.kotlogram.models.entity.*
 import com.y9san9.kotlogram.models.extentions.input
@@ -74,25 +75,39 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun auth(
-        phone: String,
-        passwordHandler: () -> String = {
-            throw UnsupportedOperationException("Account has two factor auth, but handler was not set")
-        },
-        codeHandler: () -> String
+            phone: String,
+            allowFlashcall: Boolean = false,
+            currentNumber: Boolean = true,
+            handler: AuthDSL.() -> Unit
     ): Unit = try {
-        val sentCode = client.authSendCode(false, phone, true)
-        val confirmationCode = codeHandler()
-        val auth = try {
-            client.authSignIn(phone, sentCode.phoneCodeHash, confirmationCode)
-        } catch (e: RpcErrorException){
-            if(e.code == 401){
-                client.authCheckPassword(passwordHandler())
-            } else throw e
-        }
-        println("Signed in as ${auth.user.asUser.firstName}")
+        val sentCode = client.authSendCode(allowFlashcall, phone, currentNumber)
+        val dsl = AuthDSL(sentCode.wrap(this),
+            codeReceiver = { code ->
+                try {
+                    val auth = client.authSignIn(phone, sentCode.phoneCodeHash, code)
+                    signedHandler(auth.user.wrap(this@KotlogramClient))
+                    true
+                } catch (e: RpcErrorException) {
+                    if(e.code == 401){
+                        passwordHandler()
+                        true
+                    } else false
+                }
+            },
+            passwordReceiver = { password ->
+                try {
+                    val auth = client.authCheckPassword(password)
+                    signedHandler(auth.user.wrap(this@KotlogramClient))
+                    true
+                } catch (_: RpcErrorException) {
+                    false
+                }
+            }
+        ).apply(handler)
+        dsl.codeHandler()
     } catch (e: RpcErrorException) {
         if (e.code == 500) {
-            auth(phone, passwordHandler, codeHandler)
+            auth(phone, allowFlashcall, currentNumber, handler)
         } else throw e
     }
 

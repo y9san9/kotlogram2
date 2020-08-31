@@ -8,32 +8,28 @@ import com.y9san9.kds.KDataStorage
 import com.y9san9.kds.commit
 import java.io.File
 
-class ApiStorage(private val name: String = "") : TelegramApiStorage {
-    private val storage = object : KDataStorage(File(System.getProperty("user.dir"), name)) {
-        var authKey by property<ByteArray?>()
-        var dataCenterIp by property<String?>()
-        var dataCenterPort by property<Int?>()
-        var session by property<MTSession?>()
-    }
+
+private class Storage(name: String) : KDataStorage(name) {
+    var authKey by property<ByteArray?>()
+    var dataCenter by property<DataCenter?>()
+    var session by property<MTSession?>()
+}
+
+class ApiStorage(name: String = "") : TelegramApiStorage {
+    private val storage = Storage(name)
 
     override fun saveAuthKey(authKey: AuthKey) = storage.commit { this.authKey = authKey.key }
     override fun loadAuthKey() = storage.authKey?.let { AuthKey(it) }
 
-    override fun saveDc(dataCenter: DataCenter) = dataCenter.toString().split(":")
-        .let { (ip, port) ->
-            storage.commit {
-                dataCenterIp = ip
-                dataCenterPort = port.toInt()
-            }
-        }
+    override fun saveDc(dataCenter: DataCenter) = storage.commit {
+        this.dataCenter = dataCenter
+    }
 
-    override fun loadDc() =
-        storage.dataCenterIp?.let { ip -> storage.dataCenterPort?.let { port -> DataCenter(ip, port) } }
+    override fun loadDc() = storage.dataCenter
 
     override fun deleteAuthKey() = storage.commit { authKey = null }
     override fun deleteDc() = storage.commit {
-        dataCenterIp = null
-        dataCenterPort = null
+        dataCenter = null
     }
 
     override fun saveSession(session: MTSession?) = storage.commit {
