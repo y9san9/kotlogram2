@@ -2,8 +2,10 @@ package com.y9san9.kotlogram.dsl.auth
 
 import com.y9san9.kotlogram.models.SentCode
 import com.y9san9.kotlogram.models.entity.User
-import examples.auth.scanner
+import java.util.*
 
+
+private val scanner = Scanner(System.`in`)
 
 class AuthDSL(
     private val sentCode: SentCode,
