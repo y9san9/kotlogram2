@@ -9,6 +9,9 @@ fun main() {
     val crinny = client.getByUsername("crinny") as User
 
     client.updates {
+        command("start") {
+            it.reply("Welcome!")
+        }
         message {
             filter {
                 it.from.id in listOf(alex.id, crinny.id)

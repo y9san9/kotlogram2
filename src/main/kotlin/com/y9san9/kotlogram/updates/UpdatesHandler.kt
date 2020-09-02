@@ -63,6 +63,12 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
             }
             handler(it)
         }
+        fun command(command: String, prefix: String = "/", handler: EventHandler<Message>) = text {
+            filter {
+                it.message!!.matches(Regex("^$prefix$command(@${client.me.username})?( .*)?"))
+            }
+            handler(it)
+        }
         fun all(
             handler: EventHandler<TLAbsUpdate>
         ) = handlers.add(AllHandler(handler))
