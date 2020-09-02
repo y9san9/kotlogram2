@@ -41,7 +41,7 @@ class Button private constructor(
     }
 
     fun click(game: Boolean = false) = when(buttonType){
-        ButtonType.Button -> client.sendMessage(message!!.to.input, text)
+        ButtonType.Button -> client.sendMessage(message!!.to.entity, text)
         ButtonType.ButtonCallback -> message!!.client.client.messagesGetBotCallbackAnswer(
                 game, message.to.input, message.id, data
         ).let { }

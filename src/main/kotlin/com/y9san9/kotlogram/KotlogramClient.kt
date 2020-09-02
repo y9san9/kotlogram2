@@ -6,6 +6,7 @@ import com.github.badoualy.telegram.tl.core.TLBool
 import com.github.badoualy.telegram.tl.core.TLVector
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
 import com.y9san9.kotlogram.dsl.auth.AuthDSL
+import com.y9san9.kotlogram.models.Peer
 import com.y9san9.kotlogram.models.SentCode
 import com.y9san9.kotlogram.models.TelegramApp
 import com.y9san9.kotlogram.models.entity.*
@@ -19,7 +20,11 @@ import com.y9san9.kotlogram.utils.vectorOf
 import kotlin.random.Random
 
 
-class KotlogramClient(app: TelegramApp, sessionName: String = "") {
+class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
+    val me by lazy {
+        client.usersGetUsers(vectorOf(TLInputUserSelf()))[0].wrap(this)
+    }
+
     private val cachedEntities = mutableListOf<Entity>()
     internal fun addEntities(users: TLVector<TLAbsUser>? = null, chats: TLVector<TLAbsChat>? = null) {
         users?.let {
@@ -33,9 +38,10 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
     private val updateCallback = UpdatesHandler(this)
     fun updates(handler: UpdatesHandler.UpdateDSL.() -> Unit) = updateCallback.handler(handler)
 
+    private val storage = ApiStorage(sessionName)
     @Suppress("MemberVisibilityCanBePrivate")
     val client = Kotlogram.getDefaultClient(
-            app.toKotlogramApp(), ApiStorage(sessionName), updateCallback = updateCallback
+            app.toKotlogramApp(), storage, updateCallback = updateCallback
     )
 
     fun getChannel(id: Int): Channel? = cachedEntities.firstOrNull {
@@ -74,6 +80,9 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
     fun getMessages(vararg ids: Int) = client.messagesGetMessages(intVectorOf(*ids)).messages.map {
         it.wrap(this)
     }
+
+    fun botAuth(token: String)
+            = client.authImportBotAuthorization(0, app.apiId, app.apiHash, token).user.wrap(this)
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun auth(
@@ -125,9 +134,8 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
             = client.authCancelCode(code.phone, code.hash) == TLBool.TRUE
 
     /* MESSAGE METHODS */
-
     fun sendMessage(
-            to: TLAbsInputPeer,
+            to: Entity,
             text: String? = null,
             silent: Boolean = false,
             clearDraft: Boolean = true,
@@ -135,18 +143,18 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
             replyMarkup: ReplyMarkup? = null,
             entities: Array<TLAbsMessageEntity> = arrayOf()
     ) = client.messagesSendMessage(
-        true, silent, false, clearDraft, to, replyTo, text,
+        true, silent, false, clearDraft, to.peer.input, replyTo, text,
             Random.nextLong(), replyMarkup?.unwrap(), vectorOf(*entities)
     ).let {  }
 
     fun editMessage(
-        to: TLAbsInputPeer,
+        to: Entity,
         id: Int,
         text: String? = null,
         replyMarkup: ReplyMarkup? = null,
         entities: Array<TLAbsMessageEntity>
     ) = client.messagesEditMessage(
-            true, to, id, text, replyMarkup?.unwrap(), vectorOf(*entities)
+            true, to.peer.input, id, text, replyMarkup?.unwrap(), vectorOf(*entities)
     ).let { }
 
     fun deleteMessage(deleteForAll: Boolean = true, vararg ids: Int): Unit = client.messagesDeleteMessages(

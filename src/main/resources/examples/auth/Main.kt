@@ -10,9 +10,7 @@ fun main(){
     val phone = scanner.nextLine()
     client.auth(phone) {
         val code = code {
-            if(!check(scanner.nextLine()))
-                sentCode.cancel()
-            else sentCode.resend()
+            check(scanner.nextLine())
         }
     }
 }

@@ -17,7 +17,14 @@ open class Entity (
             replyTo: Int? = null,
             replyMarkup: ReplyMarkup? = null,
             entities: Array<TLAbsMessageEntity> = arrayOf()
-    ) = client.sendMessage(peer.input, text, silent, clearDraft, replyTo, replyMarkup, entities)
+    ) = client.sendMessage(this, text, silent, clearDraft, replyTo, replyMarkup, entities)
+
+    fun editMessage(
+        id: Int,
+        text: String? = null,
+        replyMarkup: ReplyMarkup? = null,
+        entities: Array<TLAbsMessageEntity>
+    ) = client.editMessage(this, id, text, replyMarkup, entities)
 }
 
 fun TLAbsChat.wrap(client: KotlogramClient) : Entity? {
