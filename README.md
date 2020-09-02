@@ -14,7 +14,10 @@
 
 ## 👀 Example
 ```kotlin
+// bot auth
 client.botAuth(...)
+// user auth
+client.auth(...)
     
 val alex = client.getByUsername("y9san9") as User
 val crinny = client.getByUsername("crinny") as User
