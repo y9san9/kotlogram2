@@ -68,7 +68,9 @@ class Message(
         client.getUser(source.fromId)
             ?: throw UnsupportedOperationException("Cannot find owner by id ${source.fromId}")
     }
-    val to = source.toId.wrap(client)
+    val to by lazy {
+        source.toId.wrap(client).entity
+    }
     val fwdFrom: TLMessageFwdHeader? = source.fwdFrom
     val viaBot by lazy {
         client.getUser(source.viaBotId)
@@ -92,7 +94,7 @@ class Message(
         replyMarkup: ReplyMarkup? = null,
         entities: Array<TLAbsMessageEntity> = arrayOf()
     ) = client.sendMessage(
-        if(to.isUser && !out) from else to.entity,
+        if(to.peer.isUser && !out) from else to,
         text, silent, clearDraft, id, replyMarkup, entities
     )
 
@@ -100,7 +102,7 @@ class Message(
         text: String? = null,
         replyMarkup: ReplyMarkup? = null,
         entities: Array<TLAbsMessageEntity>
-    ) = client.editMessage(to.entity, id, text, replyMarkup, entities)
+    ) = client.editMessage(to, id, text, replyMarkup, entities)
 
     fun delete(deleteForAll: Boolean = true) = client.deleteMessage(deleteForAll, id)
 

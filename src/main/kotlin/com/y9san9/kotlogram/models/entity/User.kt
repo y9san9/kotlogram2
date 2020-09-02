@@ -23,6 +23,7 @@ class User(
     val accessHash: Long = source.accessHash
     val firstName = source.firstName ?: ""
     val lastName: String? = source.lastName
+    val fullname = "$firstName${if(lastName == null) "" else " $lastName"}"
     val username: String? = source.username
     val phone: String? = source.phone
     val photo: TLAbsUserProfilePhoto? = source.photo

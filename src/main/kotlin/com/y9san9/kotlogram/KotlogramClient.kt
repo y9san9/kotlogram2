@@ -40,7 +40,7 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
     private val storage = ApiStorage(sessionName)
     @Suppress("MemberVisibilityCanBePrivate")
     val client = Kotlogram.getDefaultClient(
-            app.toKotlogramApp(), storage, updateCallback = updateCallback
+        app.toKotlogramApp(), storage, updateCallback = updateCallback
     )
 
     fun getChannel(id: Int): Channel? = cachedEntities.firstOrNull {

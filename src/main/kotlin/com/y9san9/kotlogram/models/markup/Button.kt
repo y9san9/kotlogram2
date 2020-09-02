@@ -41,9 +41,9 @@ class Button private constructor(
     }
 
     fun click(game: Boolean = false) = when(buttonType){
-        ButtonType.Button -> client.sendMessage(message!!.to.entity, text)
+        ButtonType.Button -> client.sendMessage(message!!.to, text)
         ButtonType.ButtonCallback -> message!!.client.client.messagesGetBotCallbackAnswer(
-                game, message.to.input, message.id, data
+                game, message.to.peer.input, message.id, data
         ).let { }
         else -> throw UnsupportedOperationException()
     }

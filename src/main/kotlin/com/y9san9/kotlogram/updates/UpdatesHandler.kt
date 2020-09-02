@@ -5,9 +5,20 @@ import com.github.badoualy.telegram.api.UpdateCallback
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.api.updates.TLDifference
 import com.y9san9.kotlogram.KotlogramClient
-import com.y9san9.kotlogram.models.entity.wrap
 import com.y9san9.kotlogram.models.Message
 import com.y9san9.kotlogram.models.wrap
+
+
+typealias EventHandler<T> = EventDSL.(T) -> Unit
+
+class EventDSL {
+    fun filter(filter: () -> Boolean) {
+        if(!filter())
+            throw EventFiltered()
+    }
+    class EventFiltered : IllegalStateException()
+}
+
 
 class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
     private var realHandler = UpdateDSL(client)
@@ -51,9 +62,8 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
     }
 
     class UpdateDSL(private val client: KotlogramClient) {
-        private val handlers = mutableListOf<HandlerDSL<*>>()
-        abstract class HandlerDSL<T> {
-            abstract val handler: (T) -> Unit
+        private val handlers = mutableListOf<Handler<*>>()
+        abstract class Handler<T>(val handler: EventHandler<T>) {
             /**
              * @throws Throwable or
              * @return null if cannot intercept update
@@ -61,40 +71,39 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
             abstract fun mapUpdate(update: TLAbsUpdate) : T
         }
 
-        class MessageHandler(
+        class MessageHandler (
             private val client: KotlogramClient,
-            override val handler: (Message) -> Unit,
-            private val messagePredicate: (Message) -> Unit
-        ) : HandlerDSL<Message>() {
+            handler: EventHandler<Message>
+        ) : Handler<Message>(handler) {
             @Suppress("UNCHECKED_CAST")
             override fun mapUpdate(update: TLAbsUpdate) = when(update){
                 is TLUpdateNewMessage -> update.message
                 is TLUpdateNewChannelMessage -> update.message
                 else -> throw UnsupportedOperationException()
-            }.wrap(client).also {
-                messagePredicate(it)
-            }
+            }.wrap(client)
         }
 
-        /**
-         * @param messagePredicate - throw error or nothing
-         */
         fun message(
-            messagePredicate: (Message) -> Unit = { },
-            handler: (Message) -> Unit
-        ) = handlers.add(MessageHandler(client, handler, messagePredicate))
+            handler: EventHandler<Message>
+        ) = handlers.add(MessageHandler(client, handler))
 
-        class AllHandler(override val handler: (TLAbsUpdate) -> Unit) : HandlerDSL<TLAbsUpdate>(){
+        class AllHandler(
+            handler: EventHandler<TLAbsUpdate>
+        ) : Handler<TLAbsUpdate>(handler){
             override fun mapUpdate(update: TLAbsUpdate) = update
         }
-        fun all(handler: (TLAbsUpdate) -> Unit) = handlers.add(AllHandler(handler))
+        fun all(
+            handler: EventHandler<TLAbsUpdate>
+        ) = handlers.add(AllHandler(handler))
 
         operator fun invoke(vararg update: TLAbsUpdate) = update.forEach {
             for(handler in handlers)
                 handleUpdate(handler, it)
         }
-        private fun <T> handleUpdate(handler: HandlerDSL<T>, update: TLAbsUpdate) = try {
-            handler.handler(handler.mapUpdate(update))
+        private fun <T> handleUpdate(handler: Handler<T>, update: TLAbsUpdate) = try {
+            try {
+                handler.handler(EventDSL(), handler.mapUpdate(update))
+            } catch (_: EventDSL.EventFiltered) { }
         } catch (_: Throwable){}
     }
 }
