@@ -12,11 +12,29 @@
     <img alt="HoC" src="https://hitsofcode.com/github/y9san9/kotlogram2?branch=master"/>
 </p>
 
+## 👀 Example
+```kotlin
+client.botAuth(...)
+    
+val alex = client.getByUsername("y9san9") as User
+val crinny = client.getByUsername("crinny") as User
+
+client.updates {
+    command("start") {
+        it.reply("Welcome!")
+    }
+    message {
+        filter {
+            it.from.id in listOf(alex.id, crinny.id)
+        }
+        println("${it.from.fullname}: ${it.message}")
+    }
+}
+```
+
 ## 🚩 TODO
-- bot auth support
 - wrap all api with convinient functions and models
 - upgrade api layer to latest
-- cover code with tests
 
 
 ## 🚀 Installation (Gradle) [![](https://jitpack.io/v/y9san9/kotlogram2.svg)](https://jitpack.io/#y9san9/kotlogram2) 
