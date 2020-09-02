@@ -9,20 +9,10 @@ fun main(){
     print("Enter phone: ")
     val phone = scanner.nextLine()
     client.auth(phone) {
-        code {
-            do {
-                print("Enter code from telegram: ")
-                val code = scanner.nextLine()
-            } while (!check(code))
-        }
-        password {
-            do {
-                print("Enter account password: ")
-                val password = scanner.nextLine()
-            } while (!check(password))
-        }
-        signed {
-            println("Signed in as ${it.firstName}")
+        val code = code {
+            if(!check(scanner.nextLine()))
+                sentCode.cancel()
+            else sentCode.resend()
         }
     }
 }

@@ -2,9 +2,11 @@ package com.y9san9.kotlogram
 
 import com.github.badoualy.telegram.api.Kotlogram
 import com.github.badoualy.telegram.tl.api.*
+import com.github.badoualy.telegram.tl.core.TLBool
 import com.github.badoualy.telegram.tl.core.TLVector
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
 import com.y9san9.kotlogram.dsl.auth.AuthDSL
+import com.y9san9.kotlogram.models.SentCode
 import com.y9san9.kotlogram.models.TelegramApp
 import com.y9san9.kotlogram.models.entity.*
 import com.y9san9.kotlogram.models.extentions.input
@@ -78,16 +80,17 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
             phone: String,
             allowFlashcall: Boolean = false,
             currentNumber: Boolean = true,
-            handler: AuthDSL.() -> Unit
+            handler: AuthDSL.() -> Unit = {}
     ): Unit = try {
         val sentCode = client.authSendCode(allowFlashcall, phone, currentNumber)
-        val dsl = AuthDSL(sentCode.wrap(this),
+        val dsl = AuthDSL(sentCode.wrap(phone, this),
             codeReceiver = { code ->
                 try {
                     val auth = client.authSignIn(phone, sentCode.phoneCodeHash, code)
                     signedHandler(auth.user.wrap(this@KotlogramClient))
                     true
                 } catch (e: RpcErrorException) {
+                    println(e)
                     if(e.code == 401){
                         passwordHandler()
                         true
@@ -116,6 +119,10 @@ class KotlogramClient(app: TelegramApp, sessionName: String = "") {
         true
     } catch (_: RpcErrorException){ false }
 
+    fun resendAuthCode(code: SentCode)
+            = client.authResendCode(code.phone, code.hash).wrap(code.phone, this)
+    fun cancelAuthCode(code: SentCode)
+            = client.authCancelCode(code.phone, code.hash) == TLBool.TRUE
 
     /* MESSAGE METHODS */
 
