@@ -6,7 +6,6 @@ import com.github.badoualy.telegram.tl.core.TLBool
 import com.github.badoualy.telegram.tl.core.TLVector
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
 import com.y9san9.kotlogram.dsl.auth.AuthDSL
-import com.y9san9.kotlogram.models.Peer
 import com.y9san9.kotlogram.models.SentCode
 import com.y9san9.kotlogram.models.TelegramApp
 import com.y9san9.kotlogram.models.entity.*
