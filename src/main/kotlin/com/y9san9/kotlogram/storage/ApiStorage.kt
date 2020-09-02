@@ -13,6 +13,7 @@ private class Storage(name: String) : KDataStorage(name) {
     var authKey by property<ByteArray?>()
     var dataCenter by property<DataCenter?>()
     var session by property<MTSession?>()
+    var selfId by property<Int?>(0)
 }
 
 class ApiStorage(name: String = "") : TelegramApiStorage {
