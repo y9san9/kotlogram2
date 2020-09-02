@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to kotlogram2 👋</h1>
 <p align="center">
-    An convinient wrapper for <a href="https://github.com/y9san9/kotlogram">kotlogram</a>
+    An convenient wrapper for <a href="https://github.com/y9san9/kotlogram">kotlogram</a>
     <br><br>
     <a href="https://codebeat.co/projects/github-com-y9san9-kotlogram2-master"><img alt="codebeat badge" src="https://codebeat.co/badges/5897c206-ad32-48b0-a798-8bb241c2b853" /></a>
     <a href="https://github.com/y9san9/kotlogram2/blob/master/LICENSE"><img alt="Licence" src="https://img.shields.io/github/license/y9san9/kotlogram2.svg"/></a>
@@ -33,7 +33,7 @@ client.updates {
 ```
 
 ## 🚩 TODO
-- wrap all api with convinient functions and models
+- wrap all api with convenient functions and models
 - upgrade api layer to latest
 
 
