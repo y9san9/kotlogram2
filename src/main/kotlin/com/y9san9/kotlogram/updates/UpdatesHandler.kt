@@ -7,17 +7,7 @@ import com.github.badoualy.telegram.tl.api.updates.TLDifference
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.Message
 import com.y9san9.kotlogram.models.wrap
-
-
-typealias EventHandler<T> = EventDSL.(T) -> Unit
-
-class EventDSL {
-    fun filter(filter: () -> Boolean) {
-        if(!filter())
-            throw EventFiltered()
-    }
-    class EventFiltered : IllegalStateException()
-}
+import com.y9san9.kotlogram.updates.handlers.*
 
 
 class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
@@ -63,34 +53,15 @@ class UpdatesHandler(private val client: KotlogramClient) : UpdateCallback {
 
     class UpdateDSL(private val client: KotlogramClient) {
         private val handlers = mutableListOf<Handler<*>>()
-        abstract class Handler<T>(val handler: EventHandler<T>) {
-            /**
-             * @throws Throwable or
-             * @return null if cannot intercept update
-             */
-            abstract fun mapUpdate(update: TLAbsUpdate) : T
-        }
-
-        class MessageHandler (
-            private val client: KotlogramClient,
-            handler: EventHandler<Message>
-        ) : Handler<Message>(handler) {
-            @Suppress("UNCHECKED_CAST")
-            override fun mapUpdate(update: TLAbsUpdate) = when(update){
-                is TLUpdateNewMessage -> update.message
-                is TLUpdateNewChannelMessage -> update.message
-                else -> throw UnsupportedOperationException()
-            }.wrap(client)
-        }
 
         fun message(
             handler: EventHandler<Message>
         ) = handlers.add(MessageHandler(client, handler))
-
-        class AllHandler(
-            handler: EventHandler<TLAbsUpdate>
-        ) : Handler<TLAbsUpdate>(handler){
-            override fun mapUpdate(update: TLAbsUpdate) = update
+        fun text(handler: EventHandler<Message>) = message {
+            filter {
+                it.message != null && it.media == null
+            }
+            handler(it)
         }
         fun all(
             handler: EventHandler<TLAbsUpdate>

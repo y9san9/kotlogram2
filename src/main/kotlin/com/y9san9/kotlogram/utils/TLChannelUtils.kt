@@ -1,7 +1,7 @@
-package com.y9san9.kotlogram.models.extentions
+package com.y9san9.kotlogram.utils
 
 import com.github.badoualy.telegram.tl.api.TLChannel
 import com.github.badoualy.telegram.tl.api.TLInputChannel
 
 
-val TLChannel.input get() = TLInputChannel(id, accessHash)
+internal val TLChannel.input get() = TLInputChannel(id, accessHash)

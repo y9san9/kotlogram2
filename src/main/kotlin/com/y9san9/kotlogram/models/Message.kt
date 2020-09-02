@@ -5,6 +5,8 @@ import com.github.badoualy.telegram.tl.api.*
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
 import com.y9san9.kotlogram.models.markup.wrap
+import com.y9san9.kotlogram.models.media.Media
+import com.y9san9.kotlogram.models.media.wrap
 
 fun TLAbsMessage.wrap(client: KotlogramClient) : Message = when(this){
     is TLMessage -> Message(client, this, null)
@@ -81,7 +83,7 @@ class Message(
     val reply by lazy { client.getMessage(source.replyToMsgId ?: return@lazy null) }
     val date = source.date
     val message: String? = source.message
-    val media: TLAbsMessageMedia? = source.media
+    val media: Media? = source.media?.wrap(client)
     val replyMarkup = source.replyMarkup?.wrap(client, this)
     val entities: List<TLAbsMessageEntity>? = source.entities
     val views: Int? = source.views

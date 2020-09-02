@@ -1,6 +1,7 @@
 package com.y9san9.kotlogram
 
 import com.github.badoualy.telegram.api.Kotlogram
+import com.github.badoualy.telegram.api.utils.InputFileLocation
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.core.TLBool
 import com.github.badoualy.telegram.tl.core.TLVector
@@ -9,13 +10,18 @@ import com.y9san9.kotlogram.dsl.auth.AuthDSL
 import com.y9san9.kotlogram.models.SentCode
 import com.y9san9.kotlogram.models.TelegramApp
 import com.y9san9.kotlogram.models.entity.*
-import com.y9san9.kotlogram.models.extentions.input
+import com.y9san9.kotlogram.utils.input
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
+import com.y9san9.kotlogram.models.media.Document
+import com.y9san9.kotlogram.models.media.FileLocation
+import com.y9san9.kotlogram.models.media.Photo
+import com.y9san9.kotlogram.models.media.PhotoSize
 import com.y9san9.kotlogram.models.wrap
 import com.y9san9.kotlogram.storage.ApiStorage
 import com.y9san9.kotlogram.updates.UpdatesHandler
 import com.y9san9.kotlogram.utils.intVectorOf
 import com.y9san9.kotlogram.utils.vectorOf
+import java.io.ByteArrayOutputStream
 import kotlin.random.Random
 
 
@@ -177,5 +183,16 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
 
     fun kick(channel: Channel, user: User, kicked: Boolean = true) {
         client.channelsKickFromChannel(channel.source.input, user.source.input, kicked)
+    }
+
+    /* FILE METHODS */
+    fun download(fileLocation: FileLocation) = download(fileLocation.input, fileLocation.size)
+    fun download(document: Document) = download(document.input, document.size)
+    fun download(photo: Photo, size: PhotoSize): ByteArray = TODO()
+
+    private fun download(location: InputFileLocation, size: Int) : ByteArray {
+        val output = ByteArrayOutputStream()
+        client.downloadSync(location, size, output)
+        return output.toByteArray()
     }
 }
