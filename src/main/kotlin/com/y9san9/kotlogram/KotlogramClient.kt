@@ -13,16 +13,14 @@ import com.y9san9.kotlogram.models.TelegramApp
 import com.y9san9.kotlogram.models.entity.*
 import com.y9san9.kotlogram.utils.input
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
-import com.y9san9.kotlogram.models.media.Document
-import com.y9san9.kotlogram.models.media.FileLocation
-import com.y9san9.kotlogram.models.media.Photo
-import com.y9san9.kotlogram.models.media.PhotoSize
+import com.y9san9.kotlogram.models.media.*
 import com.y9san9.kotlogram.models.wrap
 import com.y9san9.kotlogram.storage.ApiStorage
 import com.y9san9.kotlogram.updates.UpdatesHandler
 import com.y9san9.kotlogram.utils.intVectorOf
 import com.y9san9.kotlogram.utils.vectorOf
 import java.io.ByteArrayOutputStream
+import java.io.File
 import kotlin.random.Random
 
 
@@ -147,11 +145,18 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
             clearDraft: Boolean = true,
             replyTo: Int? = null,
             replyMarkup: ReplyMarkup? = null,
-            entities: Array<TLAbsMessageEntity> = arrayOf()
-    ) = client.messagesSendMessage(
-        true, silent, false, clearDraft, to.peer.input, replyTo, text,
-            Random.nextLong(), replyMarkup?.unwrap(), vectorOf(*entities)
-    ).let {  }
+            media: List<Media> = listOf(),
+            scheduledDate: Long? = null,
+            entities: List<TLAbsMessageEntity> = listOf()
+    ) = if(media.isEmpty()) {
+        client.messagesSendMessage(
+            true, silent, false,
+            clearDraft, to.peer.input, replyTo, text,
+            Random.nextLong(), replyMarkup?.unwrap(), vectorOf(*entities.toTypedArray()), scheduledDate
+        ).let { }
+    } else {
+        TODO()
+    }
 
     fun editMessage(
         to: Entity,
@@ -201,4 +206,12 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
         client.downloadSync(location, size, output)
         return output.toByteArray()
     }
+
+    /**
+     * Saves a part of a large file (over 10Mb in size) to be later passed to one of the methods.
+     */
+    fun uploadFile(file: File) = uploadFile(file.readBytes())
+    fun uploadFile(bytes: ByteArray) = client.uploadSaveBigFilePart(
+        Random.nextLong(), 1, 1, TLBytes(bytes)
+    ) == TLBool.TRUE
 }

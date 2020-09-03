@@ -94,10 +94,12 @@ class Message(
         silent: Boolean = false,
         clearDraft: Boolean = true,
         replyMarkup: ReplyMarkup? = null,
-        entities: Array<TLAbsMessageEntity> = arrayOf()
+        media: List<Media> = listOf(),
+        scheduledDate: Long? = null,
+        entities: List<TLAbsMessageEntity> = listOf()
     ) = client.sendMessage(
         if(to.peer.isUser && !out) from else to,
-        text, silent, clearDraft, id, replyMarkup, entities
+        text, silent, clearDraft, id, replyMarkup, media, scheduledDate, entities
     )
 
     fun edit(

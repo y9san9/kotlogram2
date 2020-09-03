@@ -4,6 +4,7 @@ import com.github.badoualy.telegram.tl.api.*
 import com.y9san9.kotlogram.KotlogramClient
 import com.y9san9.kotlogram.models.Peer
 import com.y9san9.kotlogram.models.markup.ReplyMarkup
+import com.y9san9.kotlogram.models.media.Media
 
 open class Entity (
         val client: KotlogramClient,
@@ -11,13 +12,17 @@ open class Entity (
 ) {
     val id = peer.id
     fun sendMessage(
-            text: String = "",
-            silent: Boolean = false,
-            clearDraft: Boolean = true,
-            replyTo: Int? = null,
-            replyMarkup: ReplyMarkup? = null,
-            entities: Array<TLAbsMessageEntity> = arrayOf()
-    ) = client.sendMessage(this, text, silent, clearDraft, replyTo, replyMarkup, entities)
+        text: String = "",
+        silent: Boolean = false,
+        clearDraft: Boolean = true,
+        replyTo: Int? = null,
+        replyMarkup: ReplyMarkup? = null,
+        media: List<Media> = listOf(),
+        scheduledDate: Long? = null,
+        entities: List<TLAbsMessageEntity> = listOf()
+    ) = client.sendMessage(
+        this, text, silent, clearDraft, replyTo, replyMarkup, media, scheduledDate, entities
+    )
 
     fun editMessage(
         id: Int,

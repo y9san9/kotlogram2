@@ -30,7 +30,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    github("y9san9/kotlogram", "0b1adc9")
+    github("y9san9/kotlogram", "c3c09ea")
     github("y9san9/kotlin-data-storage", "stable-6-1")
 }
 
