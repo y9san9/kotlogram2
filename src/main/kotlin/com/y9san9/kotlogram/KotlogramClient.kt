@@ -4,6 +4,7 @@ import com.github.badoualy.telegram.api.Kotlogram
 import com.github.badoualy.telegram.api.utils.InputFileLocation
 import com.github.badoualy.telegram.tl.api.*
 import com.github.badoualy.telegram.tl.core.TLBool
+import com.github.badoualy.telegram.tl.core.TLBytes
 import com.github.badoualy.telegram.tl.core.TLVector
 import com.github.badoualy.telegram.tl.exception.RpcErrorException
 import com.y9san9.kotlogram.dsl.auth.AuthDSL
@@ -188,7 +189,12 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
     /* FILE METHODS */
     fun download(fileLocation: FileLocation) = download(fileLocation.input, fileLocation.size)
     fun download(document: Document) = download(document.input, document.size)
-    fun download(photo: Photo, size: PhotoSize): ByteArray = TODO()
+    fun download(photo: Photo, size: PhotoSize) = download(
+        InputFileLocation(
+                TLInputPhotoFileLocation(photo.id, photo.accessHash, TLBytes(byteArrayOf()), size.source),
+                size.fileLocation.input.dcId
+        ), size.fileLocation.size
+    )
 
     private fun download(location: InputFileLocation, size: Int) : ByteArray {
         val output = ByteArrayOutputStream()

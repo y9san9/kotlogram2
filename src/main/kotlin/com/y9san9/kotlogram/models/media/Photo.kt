@@ -6,10 +6,14 @@ import com.github.badoualy.telegram.tl.core.TLBytes
 import com.y9san9.kotlogram.KotlogramClient
 
 class Photo(
-        private val client: KotlogramClient, private val id: Long,
-        private val accessHash: Long, val sizes: List<PhotoSize>
+        val client: KotlogramClient, val id: Long,
+        val accessHash: Long, val sizes: List<PhotoSize>
 ) {
     fun download(size: PhotoSize) = client.download(this, size)
+    /**
+     * By default downloading photo with max size
+     */
+    fun download(index: Int = sizes.lastIndex) = client.download(this, sizes[index])
 }
 
 fun TLAbsPhoto.wrap(client: KotlogramClient): Photo? {
@@ -21,14 +25,15 @@ class PhotoSize (
         val width: Int,
         val height: Int,
         val fileLocation: FileLocation,
-        private val bytes: TLBytes? = null
+        private val bytes: TLBytes? = null,
+        internal val source: TLAbsPhotoSize
 ) {
     val size = fileLocation.size
     fun download() = bytes?.data ?: client.download(fileLocation)
 }
 
 fun TLAbsPhotoSize.wrap(client: KotlogramClient) = when(this){
-    is TLPhotoSize -> PhotoSize(client, w, h, location.wrap(size))
-    is TLPhotoCachedSize -> PhotoSize(client, w, h, location.wrap(bytes.length), bytes)
+    is TLPhotoSize -> PhotoSize(client, w, h, location.wrap(size), source = this)
+    is TLPhotoCachedSize -> PhotoSize(client, w, h, location.wrap(bytes.length), bytes, this)
     else -> null
 }
