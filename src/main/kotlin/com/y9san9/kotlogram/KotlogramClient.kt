@@ -27,7 +27,7 @@ import kotlin.random.Random
 
 private val scanner = Scanner(System.`in`)
 
-class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
+class KotlogramClient(private val app: TelegramApp, sessionName: String = "session") {
     private val updateCallback = UpdatesHandler(this)
     fun updates(handler: UpdatesHandler.UpdateDSL.() -> Unit) = updateCallback.handler(handler)
 
