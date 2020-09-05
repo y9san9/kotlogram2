@@ -5,8 +5,6 @@ import com.y9san9.kotlogram.models.entity.User
 import java.util.*
 
 
-private val scanner = Scanner(System.`in`)
-
 class AuthDSL(
     private val sentCode: SentCode,
     private val codeReceiver: AuthDSL.(String) -> Boolean,
@@ -15,14 +13,7 @@ class AuthDSL(
     inner class CodeHandler(val sentCode: SentCode) {
         fun check(code: String) = codeReceiver(code)
     }
-    internal var codeHandler: () -> Unit = CodeHandler(sentCode).let {
-        {
-            do {
-                print("Enter code from telegram: ")
-                val code = scanner.nextLine()
-            } while (!it.check(code))
-        }
-    }
+    internal var codeHandler: () -> Unit = {}
     fun code(handler: CodeHandler.() -> Unit) = CodeHandler(sentCode).also {
         codeHandler = {
             it.handler()
@@ -32,23 +23,14 @@ class AuthDSL(
     inner class PasswordHandler {
         fun check(password: String) = passwordReceiver(password)
     }
-    internal var passwordHandler: () -> Unit = PasswordHandler().let {
-        {
-            do {
-                print("Enter account password: ")
-                val password = scanner.nextLine()
-            } while (!it.check(password))
-        }
-    }
+    internal var passwordHandler: () -> Unit = {}
     fun password(handler: PasswordHandler.() -> Unit) = PasswordHandler().also {
         passwordHandler = {
             it.handler()
         }
     }
 
-    internal var signedHandler: (User) -> Unit = {
-        println("Signed in as ${it.firstName}")
-    }
+    internal var signedHandler: (User) -> Unit = {}
     fun signed(handler: (User) -> Unit) {
         signedHandler = handler
     }

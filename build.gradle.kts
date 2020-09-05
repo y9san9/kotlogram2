@@ -16,7 +16,7 @@ fun DependencyHandlerScope.github(repo: String, tag: String = "-SNAPSHOT") = imp
 fun RepositoryHandler.jitpack() = maven("https://jitpack.io")
 
 plugins {
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.0"
     maven
 }
 
@@ -30,7 +30,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    github("y9san9/kotlogram", "c3c09ea")
+    github("y9san9/kotlogram", "e84000d")
     github("y9san9/kotlin-data-storage", "stable-6-1")
 }
 

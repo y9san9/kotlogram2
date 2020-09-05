@@ -21,10 +21,22 @@ import com.y9san9.kotlogram.utils.intVectorOf
 import com.y9san9.kotlogram.utils.vectorOf
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.*
 import kotlin.random.Random
 
 
+private val scanner = Scanner(System.`in`)
+
 class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
+    private val updateCallback = UpdatesHandler(this)
+    fun updates(handler: UpdatesHandler.UpdateDSL.() -> Unit) = updateCallback.handler(handler)
+
+    private val storage = ApiStorage(sessionName)
+    @Suppress("MemberVisibilityCanBePrivate")
+    val client = Kotlogram.getDefaultClient(
+            app.toKotlogramApp(), storage, updateCallback = updateCallback
+    )
+
     val me by lazy {
         client.usersGetUsers(vectorOf(TLInputUserSelf()))[0].wrap(this)
     }
@@ -38,15 +50,6 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
             cachedEntities.addAll(chats.mapNotNull { it.wrap(this) })
         }
     }
-
-    private val updateCallback = UpdatesHandler(this)
-    fun updates(handler: UpdatesHandler.UpdateDSL.() -> Unit) = updateCallback.handler(handler)
-
-    private val storage = ApiStorage(sessionName)
-    @Suppress("MemberVisibilityCanBePrivate")
-    val client = Kotlogram.getDefaultClient(
-        app.toKotlogramApp(), storage, updateCallback = updateCallback
-    )
 
     fun getChannel(id: Int): Channel? = cachedEntities.firstOrNull {
         it is Channel && it.peer.id == id
@@ -93,7 +96,23 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
             phone: String,
             allowFlashcall: Boolean = false,
             currentNumber: Boolean = true,
-            handler: AuthDSL.() -> Unit = {}
+            handler: AuthDSL.() -> Unit = {
+                code {
+                    do {
+                        print("Enter code from telegram: ")
+                        val code = scanner.nextLine()
+                    } while (!check(code))
+                }
+                password {
+                    do {
+                        print("Enter account password: ")
+                        val password = scanner.nextLine()
+                    } while (!check(password))
+                }
+                signed {
+                    println("Signed in as ${it.firstName}")
+                }
+            }
     ): Unit = try {
         val sentCode = client.authSendCode(allowFlashcall, phone, currentNumber)
         val dsl = AuthDSL(sentCode.wrap(phone, this),
@@ -155,7 +174,7 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "") {
             Random.nextLong(), replyMarkup?.unwrap(), vectorOf(*entities.toTypedArray()), scheduledDate
         ).let { }
     } else {
-        TODO()
+
     }
 
     fun editMessage(
