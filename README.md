@@ -8,7 +8,7 @@
     <a href="https://github.com/y9san9/kotlogram2/pulls"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
     <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/y9san9/kotlogram2&title=views%20daily/total" alt="Views" />
     <br><br>
-    <img alt="LoC" src="https://tokei.rs/b1/github/y9san9/kotlogram2"/>
+    <!-- broked at the moment <img alt="LoC" src="https://tokei.rs/b1/github/y9san9/kotlogram2"/> -->
     <img alt="HoC" src="https://hitsofcode.com/github/y9san9/kotlogram2?branch=master"/>
 </p>
 
