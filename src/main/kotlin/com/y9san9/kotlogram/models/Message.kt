@@ -95,7 +95,7 @@ class Message(
         clearDraft: Boolean = true,
         replyMarkup: ReplyMarkup? = null,
         media: List<Media> = listOf(),
-        scheduledDate: Long? = null,
+        scheduledDate: Int? = null,
         entities: List<TLAbsMessageEntity> = listOf()
     ) = client.sendMessage(
         if(to.peer.isUser && !out) from else to,

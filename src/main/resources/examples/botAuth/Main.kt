@@ -8,6 +8,8 @@ fun main() {
     val alex = client.getByUsername("y9san9") as User
     val crinny = client.getByUsername("crinny") as User
 
+    alex.sendMessage("Test", scheduledDate = System.currentTimeMillis().toInt() + 6000)
+
     client.updates {
         command("start") {
             it.reply("Welcome!")

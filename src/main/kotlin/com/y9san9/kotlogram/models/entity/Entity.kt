@@ -18,7 +18,7 @@ open class Entity (
         replyTo: Int? = null,
         replyMarkup: ReplyMarkup? = null,
         media: List<Media> = listOf(),
-        scheduledDate: Long? = null,
+        scheduledDate: Int? = null,
         entities: List<TLAbsMessageEntity> = listOf()
     ) = client.sendMessage(
         this, text, silent, clearDraft, replyTo, replyMarkup, media, scheduledDate, entities

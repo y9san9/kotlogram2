@@ -146,6 +146,8 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "sessi
         } else throw e
     }
 
+    fun logout() = client.authLogOut() == TLBool.TRUE
+
     val isAuthorized get() = try {
         client.updatesGetState()
         true
@@ -165,7 +167,7 @@ class KotlogramClient(private val app: TelegramApp, sessionName: String = "sessi
             replyTo: Int? = null,
             replyMarkup: ReplyMarkup? = null,
             media: List<Media> = listOf(),
-            scheduledDate: Long? = null,
+            scheduledDate: Int? = null,
             entities: List<TLAbsMessageEntity> = listOf()
     ) = if(media.isEmpty()) {
         client.messagesSendMessage(
